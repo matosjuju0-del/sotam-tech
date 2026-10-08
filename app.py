@@ -23,26 +23,26 @@ st.sidebar.title("⚡ SOTAM TECH")
 menu = st.sidebar.radio("Navegação", ["📊 Dashboard", "📦 Inventário", "💰 Vendas", "🎯 Metas"])
 
 if menu == "📊 Dashboard":
-st.title("📊 Dashboard Executivo - SOTAM TECH")
-c1, c2, c3 = st.columns(3)
-c1.metric("Produtos em Estoque", len(df_estoque))
-c2.metric("Total de Vendas", len(df_vendas))
-c3.metric("Lucro Acumulado", f"R$ {df_vendas['Lucro'].sum() if not df_vendas.empty else 0.0:.2f}")
+    st.title("📊 Dashboard Executivo - SOTAM TECH")
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Produtos em Estoque", len(df_estoque))
+    c2.metric("Total de Vendas", len(df_vendas))
+    c3.metric("Lucro Acumulado", f"R$ {df_vendas['Lucro'].sum() if not df_vendas.empty else 0.0:.2f}")
 
 elif menu == "📦 Inventário":
-st.title("📦 Gestão de Inventário")
-with st.form("form_est"):
-prod = st.text_input("Nome do Aparelho / Modelo")
-cat = st.selectbox("Categoria", ["Smartphone", "Tablet", "Notebook", "Outros"])
-custo = st.number_input("Custo Total R$", min_value=0.0)
-preco = st.number_input("Preço de Venda R$", min_value=0.0)
-status = st.selectbox("Status", ["Disponível para Venda", "Em Manutenção", "Vendido"])
-if st.form_submit_button("Cadastrar") and prod:
-novo = pd.DataFrame([[len(df_estoque)+1, prod, cat, custo, preco, status]], columns=df_estoque.columns)
-df_estoque = pd.concat([df_estoque, novo], ignore_index=True)
-salvar_dados(df_estoque, ESTOQUE_FILE)
-st.success(f"'{prod}' cadastrado com sucesso!")
-st.rerun()
+    st.title("📦 Gestão de Inventário")
+   with st.form("form_est"):
+       prod = st.text_input("Nome do Aparelho / Modelo")
+       cat = st.selectbox("Categoria", ["Smartphone", "Tablet", "Notebook", "Outros"])
+       custo = st.number_input("Custo Total R$", min_value=0.0)
+       preco = st.number_input("Preço de Venda R$", min_value=0.0)
+       status = st.selectbox("Status", ["Disponível para Venda", "Em Manutenção", "Vendido"])
+      if st.form_submit_button("Cadastrar") and prod:
+          novo = pd.DataFrame([[len(df_estoque)+1, prod, cat, custo, preco, status]], columns=df_estoque.columns)
+          df_estoque = pd.concat([df_estoque, novo], ignore_index=True)
+          salvar_dados(df_estoque, ESTOQUE_FILE)
+          st.success(f"'{prod}' cadastrado com sucesso!")
+          st.rerun()
 st.dataframe(df_estoque, use_container_width=True)
 
 elif menu == "💰 Vendas":
