@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
 import os
+import textwrap
 from datetime import datetime
+
 
 # =========================================================
 # CONFIGURAÇÃO
@@ -37,15 +39,26 @@ COLUNAS_VENDAS = [
 
 
 # =========================================================
-# ESTILO VISUAL - SOTAM TECH
+# FUNÇÃO HTML
+# =========================================================
+
+def html(conteudo):
+    st.markdown(
+        textwrap.dedent(conteudo),
+        unsafe_allow_html=True
+    )
+
+
+# =========================================================
+# ESTILO VISUAL
 # =========================================================
 
 st.markdown("""
 <style>
 
-    /* =========================
+    /* ==============================
        FUNDO
-       ========================= */
+       ============================== */
 
     .stApp {
         background: #f4f5f7;
@@ -60,11 +73,6 @@ st.markdown("""
         background: transparent;
     }
 
-
-    /* =========================
-       ESCONDER ELEMENTOS PADRÃO
-       ========================= */
-
     #MainMenu {
         visibility: hidden;
     }
@@ -74,9 +82,9 @@ st.markdown("""
     }
 
 
-    /* =========================
+    /* ==============================
        SIDEBAR
-       ========================= */
+       ============================== */
 
     section[data-testid="stSidebar"] {
         background: #ffffff;
@@ -84,14 +92,14 @@ st.markdown("""
     }
 
     section[data-testid="stSidebar"] > div {
-        padding-top: 1.5rem;
+        padding-top: 1.3rem;
     }
 
     .sidebar-logo {
         background: #171717;
-        color: white;
-        border-radius: 16px;
-        padding: 15px 16px;
+        color: #ffffff;
+        border-radius: 18px;
+        padding: 18px;
         margin-bottom: 25px;
     }
 
@@ -104,18 +112,18 @@ st.markdown("""
     .sidebar-logo-sub {
         color: #aaaaaa;
         font-size: 11px;
-        margin-top: 3px;
+        margin-top: 4px;
     }
 
 
-    /* =========================
+    /* ==============================
        TEXTOS
-       ========================= */
+       ============================== */
 
     h1 {
         font-size: 32px !important;
         font-weight: 750 !important;
-        letter-spacing: -1.2px !important;
+        letter-spacing: -1px !important;
     }
 
     h2 {
@@ -129,85 +137,9 @@ st.markdown("""
     }
 
 
-    /* =========================
-       CARDS
-       ========================= */
-
-    .card {
-        background: #ffffff;
-        border: 1px solid #e9e9e9;
-        border-radius: 20px;
-        padding: 22px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.035);
-        margin-bottom: 18px;
-    }
-
-    .metric-card {
-        background: #ffffff;
-        border: 1px solid #e9e9e9;
-        border-radius: 20px;
-        padding: 21px;
-        min-height: 130px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.035);
-    }
-
-    .metric-card-orange {
-        background: linear-gradient(
-            135deg,
-            #ff7043,
-            #f4511e
-        );
-        color: white;
-        border-radius: 20px;
-        padding: 21px;
-        min-height: 130px;
-        box-shadow: 0 8px 25px rgba(244,81,30,0.20);
-    }
-
-    .metric-title {
-        font-size: 13px;
-        color: #777777;
-        font-weight: 500;
-    }
-
-    .metric-title-white {
-        font-size: 13px;
-        color: rgba(255,255,255,0.85);
-        font-weight: 500;
-    }
-
-    .metric-value {
-        font-size: 29px;
-        font-weight: 750;
-        margin-top: 13px;
-        letter-spacing: -1px;
-        color: #171717;
-    }
-
-    .metric-value-white {
-        font-size: 29px;
-        font-weight: 750;
-        margin-top: 13px;
-        letter-spacing: -1px;
-        color: white;
-    }
-
-    .metric-description {
-        font-size: 11px;
-        color: #999999;
-        margin-top: 7px;
-    }
-
-    .metric-description-white {
-        font-size: 11px;
-        color: rgba(255,255,255,0.8);
-        margin-top: 7px;
-    }
-
-
-    /* =========================
-       TÍTULO DO DASHBOARD
-       ========================= */
+    /* ==============================
+       CABEÇALHO
+       ============================== */
 
     .welcome-title {
         font-size: 32px;
@@ -224,44 +156,146 @@ st.markdown("""
     }
 
 
-    /* =========================
-       BADGES
-       ========================= */
+    /* ==============================
+       CARDS
+       ============================== */
 
-    .badge-green {
-        display: inline-block;
-        background: #e9f8ef;
-        color: #168344;
+    .metric-card {
+        background: #ffffff;
+        border: 1px solid #e9e9e9;
         border-radius: 20px;
-        padding: 5px 10px;
-        font-size: 11px;
-        font-weight: 600;
+        padding: 21px;
+        min-height: 125px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.035);
     }
 
-    .badge-orange {
-        display: inline-block;
-        background: #fff0e9;
-        color: #e85b25;
+    .metric-card-orange {
+        background: linear-gradient(
+            135deg,
+            #ff7043,
+            #f4511e
+        );
+        color: #ffffff;
         border-radius: 20px;
-        padding: 5px 10px;
-        font-size: 11px;
-        font-weight: 600;
+        padding: 21px;
+        min-height: 125px;
+        box-shadow: 0 8px 25px rgba(244,81,30,0.20);
     }
 
-    .badge-gray {
-        display: inline-block;
-        background: #f1f1f1;
+    .metric-title {
+        font-size: 13px;
         color: #777777;
-        border-radius: 20px;
-        padding: 5px 10px;
+        font-weight: 500;
+    }
+
+    .metric-title-white {
+        font-size: 13px;
+        color: rgba(255,255,255,0.85);
+        font-weight: 500;
+    }
+
+    .metric-value {
+        font-size: 28px;
+        font-weight: 750;
+        margin-top: 13px;
+        letter-spacing: -1px;
+        color: #171717;
+    }
+
+    .metric-value-white {
+        font-size: 28px;
+        font-weight: 750;
+        margin-top: 13px;
+        letter-spacing: -1px;
+        color: #ffffff;
+    }
+
+    .metric-description {
         font-size: 11px;
-        font-weight: 600;
+        color: #999999;
+        margin-top: 7px;
+    }
+
+    .metric-description-white {
+        font-size: 11px;
+        color: rgba(255,255,255,0.8);
+        margin-top: 7px;
     }
 
 
-    /* =========================
+    /* ==============================
+       CARD NORMAL
+       ============================== */
+
+    .card {
+        background: #ffffff;
+        border: 1px solid #e9e9e9;
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.035);
+    }
+
+
+    /* ==============================
+       RESUMO
+       ============================== */
+
+    .summary-box {
+        background: #ffffff;
+        border: 1px solid #e9e9e9;
+        border-radius: 20px;
+        padding: 22px;
+        min-height: 100%;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.035);
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 13px 0;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 13px;
+    }
+
+    .summary-label {
+        color: #777777;
+    }
+
+    .summary-value {
+        font-weight: 700;
+        color: #171717;
+    }
+
+
+    /* ==============================
+       ATIVIDADES
+       ============================== */
+
+    .activity {
+        background: #ffffff;
+        border: 1px solid #eeeeee;
+        border-radius: 14px;
+        padding: 14px 17px;
+        margin-bottom: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.025);
+    }
+
+    .activity-name {
+        font-weight: 650;
+        font-size: 14px;
+        color: #171717;
+    }
+
+    .activity-date {
+        color: #999999;
+        font-size: 11px;
+        margin-top: 4px;
+    }
+
+
+    /* ==============================
        BOTÕES
-       ========================= */
+       ============================== */
 
     .stButton > button {
         border-radius: 12px;
@@ -277,9 +311,9 @@ st.markdown("""
     }
 
 
-    /* =========================
+    /* ==============================
        INPUTS
-       ========================= */
+       ============================== */
 
     input,
     textarea {
@@ -291,9 +325,9 @@ st.markdown("""
     }
 
 
-    /* =========================
-       TABELA
-       ========================= */
+    /* ==============================
+       TABELAS
+       ============================== */
 
     div[data-testid="stDataFrame"] {
         border: 1px solid #e9e9e9;
@@ -302,71 +336,9 @@ st.markdown("""
     }
 
 
-    /* =========================
-       SEPARADORES
-       ========================= */
-
-    hr {
-        border-color: #eeeeee;
-    }
-
-
-    /* =========================
-       ATIVIDADES
-       ========================= */
-
-    .activity {
-        background: #ffffff;
-        border: 1px solid #eeeeee;
-        border-radius: 14px;
-        padding: 13px 16px;
-        margin-bottom: 8px;
-    }
-
-    .activity-name {
-        font-weight: 650;
-        font-size: 14px;
-    }
-
-    .activity-date {
-        color: #999999;
-        font-size: 11px;
-    }
-
-
-    /* =========================
-       BOX DE RESUMO
-       ========================= */
-
-    .summary-box {
-        background: #ffffff;
-        border: 1px solid #e9e9e9;
-        border-radius: 20px;
-        padding: 22px;
-        min-height: 100%;
-    }
-
-    .summary-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 12px 0;
-        border-bottom: 1px solid #f0f0f0;
-        font-size: 13px;
-    }
-
-    .summary-label {
-        color: #777777;
-    }
-
-    .summary-value {
-        font-weight: 700;
-        color: #171717;
-    }
-
-
-    /* =========================
+    /* ==============================
        PROGRESSO
-       ========================= */
+       ============================== */
 
     div[data-testid="stProgress"] > div > div {
         border-radius: 20px;
@@ -377,7 +349,7 @@ st.markdown("""
 
 
 # =========================================================
-# FUNÇÕES
+# FUNÇÕES DE DADOS
 # =========================================================
 
 def carregar_dados(arq, colunas):
@@ -480,7 +452,7 @@ def moeda(valor):
 
 
 # =========================================================
-# CARREGAR DADOS
+# CARREGAR ARQUIVOS
 # =========================================================
 
 df_estoque = carregar_dados(
@@ -500,7 +472,7 @@ preparar_dados()
 # SIDEBAR
 # =========================================================
 
-st.sidebar.markdown("""
+html("""
 <div class="sidebar-logo">
 
     <div class="sidebar-logo-title">
@@ -512,7 +484,7 @@ st.sidebar.markdown("""
     </div>
 
 </div>
-""", unsafe_allow_html=True)
+""")
 
 menu = st.sidebar.radio(
     "MENU",
@@ -537,9 +509,9 @@ st.sidebar.caption(
 
 if menu == "📊 Dashboard":
 
-    # -----------------------------------------------------
+    # -----------------------------------------
     # CÁLCULOS
-    # -----------------------------------------------------
+    # -----------------------------------------
 
     if not df_estoque.empty:
 
@@ -557,6 +529,7 @@ if menu == "📊 Dashboard":
         manutencao = pd.DataFrame()
 
     produtos_disponiveis = len(disponiveis)
+
     produtos_manutencao = len(manutencao)
 
     total_vendas = len(df_vendas)
@@ -585,31 +558,30 @@ if menu == "📊 Dashboard":
         else 0
     )
 
-    # -----------------------------------------------------
+    # -----------------------------------------
     # CABEÇALHO
-    # -----------------------------------------------------
+    # -----------------------------------------
 
-    st.markdown(
-        '<div class="welcome-title">Bom dia 👋</div>',
-        unsafe_allow_html=True
-    )
+    html("""
+    <div class="welcome-title">
+        Bom dia 👋
+    </div>
 
-    st.markdown(
-        '<div class="welcome-subtitle">'
-        'Acompanhe o desempenho da SOTAM TECH e seus principais indicadores.'
-        '</div>',
-        unsafe_allow_html=True
-    )
+    <div class="welcome-subtitle">
+        Acompanhe o desempenho da SOTAM TECH
+        e seus principais indicadores.
+    </div>
+    """)
 
-    # -----------------------------------------------------
+    # -----------------------------------------
     # CARDS
-    # -----------------------------------------------------
+    # -----------------------------------------
 
     c1, c2, c3, c4 = st.columns(4)
 
     with c1:
 
-        st.markdown(f"""
+        html(f"""
         <div class="metric-card">
 
             <div class="metric-title">
@@ -625,11 +597,11 @@ if menu == "📊 Dashboard":
             </div>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     with c2:
 
-        st.markdown(f"""
+        html(f"""
         <div class="metric-card">
 
             <div class="metric-title">
@@ -645,11 +617,11 @@ if menu == "📊 Dashboard":
             </div>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     with c3:
 
-        st.markdown(f"""
+        html(f"""
         <div class="metric-card-orange">
 
             <div class="metric-title-white">
@@ -665,11 +637,11 @@ if menu == "📊 Dashboard":
             </div>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     with c4:
 
-        st.markdown(f"""
+        html(f"""
         <div class="metric-card">
 
             <div class="metric-title">
@@ -685,51 +657,47 @@ if menu == "📊 Dashboard":
             </div>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     st.write("")
 
-    # -----------------------------------------------------
-    # SEGUNDA LINHA
-    # -----------------------------------------------------
+    # -----------------------------------------
+    # GRÁFICO + RESUMO
+    # -----------------------------------------
 
     esquerda, direita = st.columns([2, 1])
 
     with esquerda:
 
-        st.markdown(
-            '<div class="card">',
-            unsafe_allow_html=True
-        )
+        html("""
+        <div class="card">
+        """)
 
         st.subheader("📊 Faturamento")
 
         if not df_vendas.empty:
 
-            vendas_grafico = df_vendas.copy()
+            grafico = df_vendas.copy()
 
-            vendas_grafico["Data"] = pd.to_datetime(
-                vendas_grafico["Data"],
+            grafico["Data"] = pd.to_datetime(
+                grafico["Data"],
                 errors="coerce"
             )
 
-            vendas_grafico = vendas_grafico.dropna(
+            grafico = grafico.dropna(
                 subset=["Data"]
             )
 
-            if not vendas_grafico.empty:
+            if not grafico.empty:
 
-                vendas_grafico["Mês"] = (
-                    vendas_grafico["Data"]
+                grafico["Mês"] = (
+                    grafico["Data"]
                     .dt.strftime("%b")
                 )
 
                 mensal = (
-                    vendas_grafico
-                    .groupby(
-                        "Mês",
-                        sort=False
-                    )["Valor_Venda"]
+                    grafico
+                    .groupby("Mês")["Valor_Venda"]
                     .sum()
                 )
 
@@ -741,7 +709,7 @@ if menu == "📊 Dashboard":
             else:
 
                 st.info(
-                    "Ainda não existem dados suficientes para o gráfico."
+                    "Ainda não existem dados suficientes."
                 )
 
         else:
@@ -750,14 +718,13 @@ if menu == "📊 Dashboard":
                 "As vendas aparecerão aqui conforme forem registradas."
             )
 
-        st.markdown(
-            '</div>',
-            unsafe_allow_html=True
-        )
+        html("""
+        </div>
+        """)
 
     with direita:
 
-        st.markdown(f"""
+        html(f"""
         <div class="summary-box">
 
             <h3>Resumo financeiro</h3>
@@ -813,19 +780,19 @@ if menu == "📊 Dashboard":
             </div>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     st.write("")
 
-    # -----------------------------------------------------
+    # -----------------------------------------
     # ATIVIDADES RECENTES
-    # -----------------------------------------------------
+    # -----------------------------------------
 
     st.subheader("Atividades recentes")
 
     if df_vendas.empty:
 
-        st.markdown("""
+        html("""
         <div class="activity">
 
             <div class="activity-name">
@@ -837,7 +804,7 @@ if menu == "📊 Dashboard":
             </div>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     else:
 
@@ -845,7 +812,7 @@ if menu == "📊 Dashboard":
 
         for _, venda in recentes.iterrows():
 
-            st.markdown(f"""
+            html(f"""
             <div class="activity">
 
                 <div class="activity-name">
@@ -854,14 +821,12 @@ if menu == "📊 Dashboard":
 
                 <div class="activity-date">
                     Venda #{int(venda["ID_Venda"])}
-                    &nbsp; • &nbsp;
-                    {moeda(float(venda["Valor_Venda"]))}
-                    &nbsp; • &nbsp;
-                    {venda["Data"]}
+                    • {moeda(float(venda["Valor_Venda"]))}
+                    • {venda["Data"]}
                 </div>
 
             </div>
-            """, unsafe_allow_html=True)
+            """)
 
 
 # =========================================================
@@ -870,17 +835,15 @@ if menu == "📊 Dashboard":
 
 elif menu == "📦 Inventário":
 
-    st.markdown(
-        '<div class="welcome-title">Estoque</div>',
-        unsafe_allow_html=True
-    )
+    html("""
+    <div class="welcome-title">
+        Estoque
+    </div>
 
-    st.markdown(
-        '<div class="welcome-subtitle">'
-        'Gerencie os aparelhos da SOTAM TECH.'
-        '</div>',
-        unsafe_allow_html=True
-    )
+    <div class="welcome-subtitle">
+        Gerencie os aparelhos da SOTAM TECH.
+    </div>
+    """)
 
     with st.form("form_est"):
 
@@ -1017,17 +980,15 @@ elif menu == "📦 Inventário":
 
 elif menu == "💰 Vendas":
 
-    st.markdown(
-        '<div class="welcome-title">Vendas</div>',
-        unsafe_allow_html=True
-    )
+    html("""
+    <div class="welcome-title">
+        Vendas
+    </div>
 
-    st.markdown(
-        '<div class="welcome-subtitle">'
-        'Registre vendas e acompanhe seus resultados.'
-        '</div>',
-        unsafe_allow_html=True
-    )
+    <div class="welcome-subtitle">
+        Registre vendas e acompanhe seus resultados.
+    </div>
+    """)
 
     disponiveis = df_estoque[
         df_estoque["Status"] == "Disponível para Venda"
@@ -1078,21 +1039,18 @@ elif menu == "💰 Vendas":
                 aparelho["Preco_Sugerido"]
             )
 
-            st.markdown(
-                f"""
-                <div class="card">
+            html(f"""
+            <div class="card">
 
-                    <b>{aparelho["Produto"]}</b>
+                <b>{aparelho["Produto"]}</b>
 
-                    <br><br>
+                <br><br>
 
-                    Preço sugerido:
-                    <strong>{moeda(p_base)}</strong>
+                Preço sugerido:
+                <strong>{moeda(p_base)}</strong>
 
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+            </div>
+            """)
 
             pag = st.radio(
                 "Pagamento",
@@ -1232,17 +1190,15 @@ elif menu == "💰 Vendas":
 
 elif menu == "🎯 Metas":
 
-    st.markdown(
-        '<div class="welcome-title">Metas</div>',
-        unsafe_allow_html=True
-    )
+    html("""
+    <div class="welcome-title">
+        Metas
+    </div>
 
-    st.markdown(
-        '<div class="welcome-subtitle">'
-        'Acompanhe o progresso financeiro da SOTAM TECH.'
-        '</div>',
-        unsafe_allow_html=True
-    )
+    <div class="welcome-subtitle">
+        Acompanhe o progresso financeiro da SOTAM TECH.
+    </div>
+    """)
 
     meta = st.number_input(
         "Meta de faturamento",
@@ -1263,26 +1219,23 @@ elif menu == "🎯 Metas":
         else 0
     )
 
-    st.markdown(
-        f"""
-        <div class="metric-card">
+    html(f"""
+    <div class="metric-card">
 
-            <div class="metric-title">
-                🎯 Meta mensal
-            </div>
-
-            <div class="metric-value">
-                {moeda(meta)}
-            </div>
-
-            <div class="metric-description">
-                Faturado: {moeda(faturamento)}
-            </div>
-
+        <div class="metric-title">
+            🎯 Meta mensal
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+
+        <div class="metric-value">
+            {moeda(meta)}
+        </div>
+
+        <div class="metric-description">
+            Faturado: {moeda(faturamento)}
+        </div>
+
+    </div>
+    """)
 
     st.progress(progresso)
 
