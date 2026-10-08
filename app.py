@@ -31,7 +31,7 @@ if menu == "📊 Dashboard":
 
 elif menu == "📦 Inventário":
     st.title("📦 Gestão de Inventário")
-   with st.form("form_est"):
+    with st.form("form_est"):
        prod = st.text_input("Nome do Aparelho / Modelo")
        cat = st.selectbox("Categoria", ["Smartphone", "Tablet", "Notebook", "Outros"])
        custo = st.number_input("Custo Total R$", min_value=0.0)
