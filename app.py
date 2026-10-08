@@ -9,9 +9,9 @@ ESTOQUE_FILE = "estoque_sotam.csv"
 VENDAS_FILE = "vendas_sotam.csv"
 
 def carregar_dados(arq, cols):
-  if os.path.exists(arq):
-  return pd.read_csv(arq)
-    pd.DataFrame(columns=cols)
+        if os.path.exists(arq):
+              return pd.read_csv(arq)
+        return pd.DataFrame(columns=cols)
 
 def salvar_dados(df, arq):
   df.to_csv(arq, index=False)
