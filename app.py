@@ -32,22 +32,22 @@ if menu == "📊 Dashboard":
 elif menu == "📦 Inventário":
     st.title("📦 Gestão de Inventário")
     with st.form("form_est"):
-       prod = st.text_input("Nome do Aparelho / Modelo")
-       cat = st.selectbox("Categoria", ["Smartphone", "Tablet", "Notebook", "Outros"])
-       custo = st.number_input("Custo Total R$", min_value=0.0)
-       preco = st.number_input("Preço de Venda R$", min_value=0.0)
-       status = st.selectbox("Status", ["Disponível para Venda", "Em Manutenção", "Vendido"])
-      if st.form_submit_button("Cadastrar") and prod:
-          novo = pd.DataFrame([[len(df_estoque)+1, prod, cat, custo, preco, status]], columns=df_estoque.columns)
-          df_estoque = pd.concat([df_estoque, novo], ignore_index=True)
-          salvar_dados(df_estoque, ESTOQUE_FILE)
-          st.success(f"'{prod}' cadastrado com sucesso!")
-          st.rerun()
-st.dataframe(df_estoque, use_container_width=True)
+        prod = st.text_input("Nome do Aparelho / Modelo")
+        cat = st.selectbox("Categoria", ["Smartphone", "Tablet", "Notebook", "Outros"])
+        custo = st.number_input("Custo Total R$", min_value=0.0)
+        preco = st.number_input("Preço de Venda R$", min_value=0.0)
+        status = st.selectbox("Status", ["Disponível para Venda", "Em Manutenção", "Vendido"])
+        if st.form_submit_button("Cadastrar") and prod:
+            novo = pd.DataFrame([[len(df_estoque)+1, prod, cat, custo, preco, status]], columns=df_estoque.columns)
+            df_estoque = pd.concat([df_estoque, novo], ignore_index=True)
+            salvar_dados(df_estoque, ESTOQUE_FILE)
+            st.success(f"'{prod}' cadastrado com sucesso!")
+            st.rerun()
+            st.dataframe(df_estoque, use_container_width=True)
 
 elif menu == "💰 Vendas":
 st.title("💰 Registo de Vendas")
-disp = df_estoque[df_estoque["Status"] != "Vendido"]["Produto"].tolist() if not df_estoque.empty else []
+disp = df_estoque[df_estoque["Status"] == "Disponível para Venda"]["Produto"].tolist() if not df_estoque.empty else []
 if not disp:
 st.info("Nenhum produto disponível em estoque para venda.")
 else:
